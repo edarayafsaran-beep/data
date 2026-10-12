@@ -1,0 +1,159 @@
+{
+  "entities": {
+    "branch": {
+      "title": "Branch",
+      "description": "Clinic branch information",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "phone": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name"]
+    },
+    "user": {
+      "title": "User",
+      "description": "System users (staff/doctors)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "password": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["super_admin", "doctor", "receptionist", "accountant", "manager"] },
+        "branchId": { "type": "string" },
+        "salary": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "username", "password", "name", "email", "role"]
+    },
+    "patient": {
+      "title": "Patient",
+      "description": "Clinic patients",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "branchId": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "age": { "type": "number" },
+        "gender": { "type": "string" },
+        "medicalHistory": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["branchId", "name", "phone"]
+    },
+    "treatment": {
+      "title": "Treatment",
+      "description": "Available medical treatments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "branchId": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" }
+      },
+      "required": ["branchId", "name", "price"]
+    },
+    "appointment": {
+      "title": "Appointment",
+      "description": "Patient appointments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "branchId": { "type": "string" },
+        "patientId": { "type": "string" },
+        "doctorId": { "type": "string" },
+        "treatmentId": { "type": "string" },
+        "appointmentDate": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pending", "completed", "cancelled"] },
+        "paidAmount": { "type": "number" },
+        "whatsappSent": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["branchId", "patientId", "doctorId", "appointmentDate"]
+    },
+    "expense": {
+      "title": "Expense",
+      "description": "Clinic expenses",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "branchId": { "type": "string" },
+        "title": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" },
+        "recordedBy": { "type": "string" }
+      },
+      "required": ["branchId", "title", "amount"]
+    },
+    "inventory": {
+      "title": "Inventory Item",
+      "description": "Clinic inventory items",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "branchId": { "type": "string" },
+        "itemName": { "type": "string" },
+        "category": { "type": "string" },
+        "currentStock": { "type": "number" },
+        "minStockAlert": { "type": "number" }
+      },
+      "required": ["branchId", "itemName", "currentStock"]
+    },
+    "whatsappLog": {
+      "title": "WhatsApp Log",
+      "description": "Logs of sent WhatsApp messages",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "branchId": { "type": "string" },
+        "patientName": { "type": "string" },
+        "phone": { "type": "string" },
+        "messageType": { "type": "string" },
+        "sentAt": { "type": "string" },
+        "status": { "type": "string" },
+        "content": { "type": "string" }
+      },
+      "required": ["branchId", "patientName", "phone", "content"]
+    }
+  },
+  "firestore": {
+    "/branches/{branchId}": {
+      "schema": "branch",
+      "description": "Collection of clinic branches"
+    },
+    "/users/{uid}": {
+      "schema": "user",
+      "description": "Collection of system users"
+    },
+    "/patients/{patientId}": {
+      "schema": "patient",
+      "description": "Collection of patients"
+    },
+    "/treatments/{treatmentId}": {
+      "schema": "treatment",
+      "description": "Collection of treatments"
+    },
+    "/appointments/{appointmentId}": {
+      "schema": "appointment",
+      "description": "Collection of appointments"
+    },
+    "/expenses/{expenseId}": {
+      "schema": "expense",
+      "description": "Collection of expenses"
+    },
+    "/inventory/{itemId}": {
+      "schema": "inventory",
+      "description": "Collection of inventory items"
+    },
+    "/whatsappLogs/{logId}": {
+      "schema": "whatsappLog",
+      "description": "Collection of whatsapp logs"
+    }
+  }
+}

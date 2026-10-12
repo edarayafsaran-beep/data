@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ku" dir="rtl" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <title>BEAUTY CENTER | سیستەمی بەڕێوەبردنی سەنتەری جوانکاری</title>
+    <meta name="description" content="سیستەمی پێشکەوتووی بەڕێوەبردنی سەنتەری جوانکاری بۆ خزمەتگوزاریەکانی جوانکاری، لەیزەر و فیشیەڵ." />
+    <meta name="application-name" content="سەنتەری جوانکاری" />
+    <meta name="apple-mobile-web-app-title" content="BEAUTY CENTER" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta property="og:title" content="BEAUTY CENTER" />
+    <meta property="og:description" content="سیستەمی پێشکەوتووی بەڕێوەبردنی سەنتەری جوانکاری" />
+    <meta property="og:site_name" content="BEAUTY CENTER" />
+    <meta property="og:type" content="website" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&family=Readex+Pro:wght@300;400;500;600;700&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#ec4899" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #040b16;
+        color: #f1f5f9;
+        font-family: 'Vazirmatn', 'Noto Sans Arabic', 'Readex Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      .app-loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        width: 100%;
+        text-align: center;
+        padding: 20px;
+        background: radial-gradient(circle at center, rgba(236, 72, 153, 0.2) 0%, #040b16 75%);
+        box-sizing: border-box;
+      }
+      .spinner-glow {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(236, 72, 153, 0.2);
+        border-top-color: #ec4899;
+        border-right-color: #d946ef;
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+        box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      @keyframes marquee {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+      }
+      .animate-marquee {
+        display: inline-block;
+        animation: marquee 25s linear infinite;
+      }
+      .refresh-btn {
+        margin-top: 15px;
+        padding: 10px 24px;
+        background: linear-gradient(135deg, #ec4899, #d946ef);
+        color: #ffffff;
+        font-weight: 800;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: 14px;
+        box-shadow: 0 4px 20px rgba(236, 72, 153, 0.4);
+        transition: transform 0.2s;
+      }
+      .refresh-btn:active {
+        transform: scale(0.96);
+      }
+    </style>
+  </head>
+  <body class="bg-[#040b16] text-slate-100 font-sans antialiased selection:bg-pink-500 selection:text-white">
+    <div id="root">
+      <div class="app-loader" dir="rtl">
+        <div class="spinner-glow"></div>
+        <div style="font-weight: 900; font-size: 1.25rem; color: #f472b6; margin-top: 18px; letter-spacing: 0.1em; font-family: sans-serif;">
+          BEAUTY CENTER
+        </div>
+        <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 6px;">
+          سیستەمەکە لە ئامادەباشیدایە...
+        </div>
+        <button id="manual-reload-btn" class="refresh-btn" style="display:none;" onclick="window.location.reload(true);">
+          نوێکردنەوەی پەڕە ↻
+        </button>
+      </div>
+    </div>
+
+    <!-- Cleanup and unregister stale service workers and caches -->
+    <script>
+      (function() {
+        try {
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+              for (var i = 0; i < registrations.length; i++) {
+                registrations[i].unregister();
+              }
+            });
+          }
+          if ('caches' in window) {
+            caches.keys().then(function(keys) {
+              for (var i = 0; i < keys.length; i++) {
+                caches.delete(keys[i]);
+              }
+            });
+          }
+        } catch (e) {
+          console.warn('SW cleanup:', e);
+        }
+
+        // Show reload button if React takes longer than 3.5s (e.g. mobile connection or sleeping tab)
+        setTimeout(function() {
+          var btn = document.getElementById('manual-reload-btn');
+          if (btn && document.querySelector('.spinner-glow')) {
+            btn.style.display = 'inline-block';
+          }
+        }, 3500);
+      })();
+    </script>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
