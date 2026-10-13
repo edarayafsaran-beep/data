@@ -1,44 +1,38 @@
 @echo off
 cd /d "%~dp0"
 color 0a
-title Beauty Center System - Deployment & Connection
+title 1-Click Clean Deploy - Beauty Center System
 
 echo ====================================================================
-echo   Beauty Center System: Deployment ^& Database Connection
+echo   Clean Deployment to Firebase Hosting & Firestore
 echo ====================================================================
 echo.
 
-echo [1/4] Installing dependencies...
-call npm install --legacy-peer-deps
-if %errorlevel% neq 0 (
-    echo [Warning] npm install had warnings, continuing...
-)
-
-echo.
-echo [2/4] Building production bundle...
+echo [1/3] Building production bundle...
 call npm run build
 if %errorlevel% neq 0 (
-    echo [Error] Build failed! Please check your code.
+    echo [ERROR] Build failed!
     pause
-    exit /b %errorlevel%
+    exit /b 1
 )
 
 echo.
-echo [3/4] Copying firebase configuration...
-copy /y firebase.hosting-only.json firebase.json >nul 2>&1
+echo [2/3] Cleaning apphosting configurations if any...
+if exist "apphosting.yaml" del /f /q apphosting.yaml
 
 echo.
-echo [4/4] Deploying to Firebase Hosting and Firestore...
+echo [3/3] Deploying cleanly to Firebase project: beautysantar...
 call npx --yes firebase-tools deploy --only hosting,firestore --project beautysantar
 
-echo.
 if %errorlevel% equ 0 (
+    echo.
     echo ====================================================================
-    echo   [SUCCESS] Deployment complete! System is live and connected.
+    echo   [SUCCESS] Application is 100% Live and Connected!
     echo   URL: https://beautysantar.web.app
     echo ====================================================================
 ) else (
-    echo [Error] Deployment failed. If not logged in, run: npx firebase login
+    echo.
+    echo [NOTICE] If login is needed, run: npx firebase login
 )
 
 echo.
